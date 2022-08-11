@@ -1,0 +1,53 @@
+﻿<Window
+    x:Class="ComparePdfApp.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ComparePdfApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Pdf Sayfalarını Karşılaştır"
+    Width="800"
+    Height="630"
+    mc:Ignorable="d">
+    <StackPanel>
+        <Grid Height="550">
+            <ScrollViewer
+                Name="scrollViewer"
+                Height="500"
+                HorizontalAlignment="Stretch"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto">
+                <StackPanel
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="Black">
+                    <TextBlock
+                        Width="780"
+                        Padding="5"
+                        Background="Black"
+                        Foreground="Yellow"
+                        TextWrapping="Wrap">
+                        <Run Foreground="Orange" Text="Bu uygulamanın içerisindeki pdf klasörünün içerisine karşılaştırılacak pdfler koyulur ve sonrasında Karşılaştır butonuna basılarak karşılaştırma işlemi başlatılır. İlk sayfadan boyuları farklı olanlar farklı renklerde ekrana basılır ilk sayfa ile aynı boyutta olan sayfalar yeşil olarak basılır." />
+                        <LineBreak />
+                    </TextBlock>
+                    <TextBlock
+                        x:Name="progress"
+                        Width="780"
+                        Padding="5"
+                        Background="Black"
+                        Foreground="Yellow"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+        <DockPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button
+                Width="200"
+                Height="40"
+                Margin="5,0,5,0"
+                HorizontalAlignment="Right"
+                Click="ComparePdfClick"
+                Content="Karşılaştır" />
+        </DockPanel>
+    </StackPanel>
+</Window>

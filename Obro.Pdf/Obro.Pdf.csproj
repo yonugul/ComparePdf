@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+		<Prefer32Bit>False</Prefer32Bit>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+		<Prefer32Bit>False</Prefer32Bit>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="MedallionShell" Version="1.5.1" />
+		<PackageReference Include="Mime-Detective" Version="0.0.5" />
+		<PackageReference Include="nQuant.Core.NETStandard" Version="1.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ContentWithTargetPath Include="..\mupdf\linux-x64\libMuPDFWrapper.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>runtimes/linux-x64/native/libMuPDFWrapper.so</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="..\mupdf\linux-arm64\libMuPDFWrapper.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>runtimes/linux-arm64/native/libMuPDFWrapper.so</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="..\mupdf\mac-x64\libMuPDFWrapper.dylib">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>runtimes/osx-x64/native/libMuPDFWrapper.so</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="..\mupdf\mac-arm64\libMuPDFWrapper.dylib">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>runtimes/osx-arm64/native/libMuPDFWrapper.so</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="..\mupdf\win-x64\MuPDFWrapper.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>runtimes/win-x64/native/MuPDFWrapper.dll</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="..\mupdf\win-x86\MuPDFWrapper.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>runtimes/win-x86/native/MuPDFWrapper.dll</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="..\mupdf\win-arm64\\MuPDFWrapper.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>runtimes/win-arm64/native/MuPDFWrapper.dll</TargetPath>
+		</ContentWithTargetPath>
+	</ItemGroup>
+</Project>
