@@ -1,10 +1,9 @@
-﻿using Obro.Pdf;
+﻿using PdfSharp.Pdf.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -20,50 +19,77 @@ namespace ComparePdfApp
         {
             InitializeComponent();
         }
-
         private void ComparePdf()
         {
             var directory = AppDomain.CurrentDomain.BaseDirectory;
-            var pdfs = Directory.GetFiles(directory, "*.pdf",SearchOption.AllDirectories);
+            var pdfs = Directory.GetFiles(directory, "*.pdf", SearchOption.AllDirectories);
             var list = new List<ComparePdfData>();
             if (pdfs.Any())
             {
                 foreach (var pdf in pdfs)
                 {
+                    var fi = new FileInfo(pdf);
                     // Initialise the MuPDF context. This is needed to open or create documents.
-
-                    using var ctx = new MuPDFContext();
+                    //var pdfDoc = new PdfDocument(fi.OpenRead());
+                    var pdfDoc = PdfReader.Open(pdf, PdfDocumentOpenMode.Import);
+                    //using var ctx = new MuPDFContext();
 
                     // Open a PDF document
-                    using var pdfDoc = new MuPDFDocument(ctx, pdf);
-                    var fi = new FileInfo(pdf);
-                    list.AddRange(pdfDoc.Pages.Select(page => new ComparePdfData {PdfName = fi.Name, PageName = $"Sayfa : {page.PageNumber + 1}", Width = page.Bounds.Width, Height = page.Bounds.Height}));
-                }
+                    //using var pdfDoc = new MuPDFDocument(ctx, pdf);
 
-                foreach (var page in list)
-                {
-                    if (Math.Abs(list.FirstOrDefault()!.Width - page.Width) > 0 || Math.Abs(list.FirstOrDefault()!.Height - page.Height) > 0)
+                    var pageNo = 1;
+                    foreach (var page in pdfDoc.Pages)
                     {
-                        AddMessage($"{page.Width} x {page.Height}  ----  {page.PdfName} - {page.PageName}", Colors.Orange);
+                        list.Add(new ComparePdfData
+                        {
+                            PdfName = fi.Name,
+                            PageName = $"Sayfa : {pageNo}",
+                            Width = page.Width.Value,
+                            Height = page.Height.Value
+                        });
+                        pageNo++;
                     }
-                    else
-                    {
-                        AddMessage($"{page.Width} x {page.Height}  ----  {page.PdfName} - {page.PageName}", Colors.Green);
-                    }
+                    //list.AddRange(pdfDoc.Pages.Select(page => new ComparePdfData {PdfName = fi.Name, PageName = $"Sayfa : {page.PageNumber + 1}", Width = page.Bounds.Width, Height = page.Bounds.Height}));
                 }
                 var maxWidth = list.Max(c => c.Width);
                 var minWidth = list.Min(c => c.Width);
-                if (Math.Abs(maxWidth - minWidth) > 0)
-                {
-                    AddMessage($"Farklı genişlikte sayfalar mevcut {maxWidth} - {minWidth} farklı sayfaları yukarıdaki detaylardan kontrol edebilirsiniz", Colors.Red);
-                }
+                var hasDifferentWidth = Math.Abs(maxWidth - minWidth) > 0;
                 var maxHeight = list.Max(c => c.Height);
                 var minHeignt = list.Min(c => c.Height);
-                if (Math.Abs(maxHeight - minHeignt) > 0)
+                var hasDifferentHeight = Math.Abs(maxHeight - minHeignt) > 0;
+                var mostWidth = list.GroupBy(i => i.Width).OrderByDescending(grp => grp.Count())
+                    .Select(grp => grp.Key).First();
+                var mostHeight = list.GroupBy(i => i.Height).OrderByDescending(grp => grp.Count())
+                    .Select(grp => grp.Key).First();
+                if (hasDifferentHeight || hasDifferentWidth)
                 {
-                    AddMessage($"Farklı yükseklikte sayfalar mevcut - {maxHeight} - {minHeignt} farklı sayfaları yukarıdaki detaylardan kontrol edebilirsiniz", Colors.Red);
+                    foreach (var page in list)
+                    {
+                        if (Math.Abs(mostWidth - page.Width) > 0 || Math.Abs(mostHeight - page.Height) > 0)
+                        {
+                            AddMessage($"{page.Width} x {page.Height}  ----  {page.PdfName} - {page.PageName}", Colors.Orange);
+                        }
+                        else
+                        {
+                            AddMessage($"{page.Width} x {page.Height}  ----  {page.PdfName} - {page.PageName}", Colors.Green);
+                        }
+                    }
+                    if (hasDifferentWidth)
+                    {
+                        AddMessage($"Farklı genişlikte sayfalar mevcut {maxWidth} - {minWidth} farklı sayfaları yukarıdaki detaylardan kontrol edebilirsiniz", Colors.Red);
+                    }
+
+                    if (hasDifferentHeight)
+                    {
+                        AddMessage($"Farklı yükseklikte sayfalar mevcut - {maxHeight} - {minHeignt} farklı sayfaları yukarıdaki detaylardan kontrol edebilirsiniz", Colors.Red);
+                    }
                 }
-                AddMessage("Karşılaştırma tamamlandı :)",Colors.Green);
+                else
+                {
+                    AddMessage("Farklı boyutlarda sayfa bulunamadı", Colors.Green);
+                }
+
+                AddMessage("Karşılaştırma tamamlandı :)", Colors.Green);
             }
             else
             {
@@ -96,8 +122,8 @@ namespace ComparePdfApp
         {
             public string? PdfName { get; set; }
             public string? PageName { get; set; }
-            public float Width { get; set; }
-            public float Height { get; set; }
+            public double Width { get; set; }
+            public double Height { get; set; }
         }
 
         private void ComparePdfClick(object sender, RoutedEventArgs e)

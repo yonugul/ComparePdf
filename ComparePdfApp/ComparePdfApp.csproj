@@ -6,38 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Obro.Pdf\Obro.Pdf.csproj" />
-  </ItemGroup>
 	<ItemGroup>
-		<ContentWithTargetPath Include="..\mupdf\linux-x64\libMuPDFWrapper.so">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>runtimes/linux-x64/native/libMuPDFWrapper.so</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="..\mupdf\linux-arm64\libMuPDFWrapper.so">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>runtimes/linux-arm64/native/libMuPDFWrapper.so</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="..\mupdf\mac-x64\libMuPDFWrapper.dylib">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>runtimes/osx-x64/native/libMuPDFWrapper.so</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="..\mupdf\mac-arm64\libMuPDFWrapper.dylib">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>runtimes/osx-arm64/native/libMuPDFWrapper.so</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="..\mupdf\win-x64\MuPDFWrapper.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>runtimes/win-x64/native/MuPDFWrapper.dll</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="..\mupdf\win-x86\MuPDFWrapper.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>runtimes/win-x86/native/MuPDFWrapper.dll</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="..\mupdf\win-arm64\\MuPDFWrapper.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>runtimes/win-arm64/native/MuPDFWrapper.dll</TargetPath>
-		</ContentWithTargetPath>
+	  <PackageReference Include="PDFsharpNetStandard2" Version="1.51.4845" />
 	</ItemGroup>
 </Project>
